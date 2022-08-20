@@ -21,5 +21,7 @@ class Infix(object):
 
 
 prod = Infix(lambda x, y: x * y)
+where = Infix(lambda it, f: filter(f, it))
 
-print(3 |prod| 3)
+for item in [1,2,3] |where| (lambda x: x >= 2):
+    print(item)
