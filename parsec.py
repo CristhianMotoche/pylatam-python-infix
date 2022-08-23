@@ -1,6 +1,10 @@
 # Parser combinators
 #
-# text -> Either error s
+# Things to notice:
+
+# 1. A parser is a function: text -> Either error value
+# 2. A parser combiator is a high order function that takes a parser as an input
+#    and can return another parser as output.
 
 from typing import Any, NamedTuple
 
@@ -20,11 +24,15 @@ class Parser:
     def __init__(self, fn):
         self.fn = fn
 
+    # 3. Notice how we define the __call__ magic method
+    # so that Parser instances can be callable.
     def __call__(self, text, index):
         return self.fn(text, index)
 
     # parse_one | parse_two
     def __or__(self, other):
+        # 4. Since Parser is a callable that takes a function as a constructor
+        # argument, it can also be a decorator:
         @Parser
         def _choice(text, idx):
             res = self(text, idx)
@@ -44,7 +52,7 @@ class Parser:
 
         return _choice
 
-    # skip_parse >> selected_parse
+    # skip_parse_result >> select_parse_result
     def __rshift__(self, other):
         @Parser
         def _compose(text, idx):
@@ -56,7 +64,7 @@ class Parser:
 
         return _compose
 
-    # selected_parse << skip_parse
+    # select_parse_result << skip_parse_result
     def __lshift__(self, other):
         @Parser
         def _skip(text, idx):
@@ -93,11 +101,9 @@ class Parser:
                 f"at: {res.idx}"
             )
 
-
-# Things to notice:
+# 5. A string parser:
+#   Looks for a specific string
 def string(s):
-
-    # 1. Parser can be used as a decorator:
     @Parser
     def _string(text, index):
         if s == text[index : index + len(s)]:
@@ -106,6 +112,8 @@ def string(s):
 
     return _string
 
+# 6. A parser that looks for a parser `p` which is separated by the text of some
+# other parser `sep`:
 def sepBy(p, sep):
     @Parser
     def _sepBy(text, idx):
@@ -130,10 +138,12 @@ def sepBy(p, sep):
 
     return _sepBy
 
-# 2. I can define my parsers and compose them
+# 7. I can define my parsers
 py = string("Python")
 hs = string("Haskell")
 js = string("JS")
+
+# 8. And compose them:
 langs = py | hs | js
 
 comma = string(",")
@@ -144,15 +154,15 @@ right_bracket = string("}")
 
 langs = left_bracket >> langs_by_comma << right_bracket
 
-# 3. ^^ I need to learn how my EDSL for parser combinators work
+# 9. ^^ I need to learn how my EDSL for parser combinators work
 
 print(langs.parse("{Python,Haskell,JS}"))
 print(langs.parse("{Haskell}"))
 print(langs.parse("{JS}"))
 
 # Parse errors
-# print(langs.parse("[JS]"))
-# print(langs.parse("{JS]"))
+# print(langs.parse("[Python]"))
+# print(langs.parse("{Python]"))
 # print(langs.parse("{HTML}"))
 # print(langs.parse("{JS,}"))
 # print(langs.parse("{JS,CSS}"))
