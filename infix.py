@@ -23,5 +23,7 @@ class Infix(object):
 prod = Infix(lambda x, y: x * y)
 where = Infix(lambda it, f: filter(f, it))
 
-for item in [1,2,3] |where| (lambda x: x >= 2):
-    print(item)
+larger_than_five = range(1,20) |where| (lambda x: x > 5)
+
+for item in larger_than_five:
+    print(item |prod| 3)
