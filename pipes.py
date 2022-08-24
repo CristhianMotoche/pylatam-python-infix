@@ -2,9 +2,9 @@
 # What are we looking for?
 #
 # value
-#   |> fun1
-#   |> fun2(x, y)
-#   |> fun3
+#   | fun1
+#   | fun2(x, y)
+#   | fun3
 
 class Pipe:
     def __init__(self, fn):
@@ -19,7 +19,6 @@ class Pipe:
 
 value = [1,2,3]
 iddy = Pipe(lambda x: x)
-length = Pipe(lambda ls: len(ls))
 select = Pipe(lambda iterable, fn: map(fn, iterable))
 where = Pipe(lambda iterable, fn: filter(fn, iterable))
 to_list = Pipe(list)
@@ -29,8 +28,8 @@ print(
   value
   | iddy
   | select(lambda x: x + 2)
-  | where(lambda x: x % 2 == 0)
   | select(lambda x: x ** 5)
   | select(lambda x: x - 3)
+  | where(lambda x: x % 2 == 0)
   | to_list
 )

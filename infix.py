@@ -9,7 +9,7 @@
 
 
 
-class Infix(object):
+class Infix:
     def __init__(self, function):
         self.function = function
 
@@ -20,10 +20,13 @@ class Infix(object):
         return self.function(other)
 
 
-prod = Infix(lambda x, y: x * y)
+multiple_of = Infix(lambda x, y: x % y == 0)
 where = Infix(lambda it, f: filter(f, it))
 
 larger_than_five = range(1,20) |where| (lambda x: x > 5)
 
 for item in larger_than_five:
-    print(item |prod| 3)
+    if item |multiple_of| 2:
+        print(item, "is even")
+    else:
+        print(item, "is odd")

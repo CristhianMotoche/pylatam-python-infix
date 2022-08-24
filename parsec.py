@@ -152,17 +152,17 @@ langs_by_comma = sepBy(langs, comma)
 left_bracket = string("{")
 right_bracket = string("}")
 
-langs = left_bracket >> langs_by_comma << right_bracket
+langs_set = left_bracket >> langs_by_comma << right_bracket
 
 # 9. ^^ I need to learn how my EDSL for parser combinators work
 
-print(langs.parse("{Python,Haskell,JS}"))
-print(langs.parse("{Haskell}"))
-print(langs.parse("{JS}"))
+print(langs_set.parse("{Python,Haskell,JS}"))
+print(langs_set.parse("{Haskell}"))
+print(langs_set.parse("{JS}"))
 
 # Parse errors
-# print(langs.parse("[Python]"))
-# print(langs.parse("{Python]"))
-# print(langs.parse("{HTML}"))
-# print(langs.parse("{JS,}"))
-# print(langs.parse("{JS,CSS}"))
+# print(langs_set.parse("[Python]"))
+# print(langs_set.parse("{Python]"))
+# print(langs_set.parse("{HTML}"))
+# print(langs_set.parse("{JS,}"))
+# print(langs_set.parse("{JS,CSS}"))
