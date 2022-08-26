@@ -17,7 +17,7 @@ class Pipe:
     def __call__(self, *args, **kwargs):
         return Pipe(lambda x: self.fn(x, *args, **kwargs))
 
-value = [1,2,3]
+value = [1,2,3,4,5]
 iddy = Pipe(lambda x: x)
 select = Pipe(lambda iterable, fn: map(fn, iterable))
 where = Pipe(lambda iterable, fn: filter(fn, iterable))
@@ -28,8 +28,7 @@ print(
   value
   | iddy
   | select(lambda x: x + 2)
-  | select(lambda x: x ** 5)
-  | select(lambda x: x - 3)
   | where(lambda x: x % 2 == 0)
+  | select(lambda x: x - 3)
   | to_list
 )
