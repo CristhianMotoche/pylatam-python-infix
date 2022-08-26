@@ -20,13 +20,13 @@ class Infix:
         return self.function(other)
 
 
-multiple_of = Infix(lambda x, y: x % y == 0)
+is_multiple_of = Infix(lambda x, y: x % y == 0)
 where = Infix(lambda it, f: filter(f, it))
 
 larger_than_five = range(1,20) |where| (lambda x: x > 5)
 
 for item in larger_than_five:
-    if item |multiple_of| 2:
+    if item |is_multiple_of| 2:
         print(item, "is even")
     else:
         print(item, "is odd")
